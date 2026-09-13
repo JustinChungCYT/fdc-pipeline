@@ -5,6 +5,21 @@ factory sensors are appropriate for how those sensors actually behave. It runs i
 Kubernetes against a ~30 GB memory ceiling over roughly a month of
 high-cardinality sensor data.
 
+## About this repository
+
+This is a reduced copy of a pipeline that runs in production, extracted to
+document the engineering — stage orchestration, concurrency control, caching,
+and memory behaviour under a hard container limit — without carrying over
+anything specific to the process or the data behind it.
+
+Removed or replaced: the statistical and compliance rules, the source queries
+and their schema, threshold values, and internal hostnames, bucket names and
+package names. What remains is the structure, which is the part that generalises
+to other high-volume batch pipelines.
+
+The history here starts fresh — a single commit — because the original history
+contains all of the above. That is deliberate, not an incomplete import.
+
 ## Stages
 
 `compliance_runner` drives three stages in order:
@@ -80,12 +95,11 @@ It is retained for comparison.
 
 ## Status
 
-This repository is the pipeline's architecture: stage orchestration, concurrency
-control, the object-storage cache, memory management and upload verification are
-all implemented.
+Stage orchestration, concurrency control, the object-storage cache, memory
+management and upload verification are all implemented and intact.
 
-The domain computations are left as extension points, marked with `TODO` and a
-docstring describing each one's contract:
+Each piece that was stripped is documented where it used to live, with a `TODO`
+and a docstring describing its contract:
 
 - **Statistics and compliance rules** — outlier-bound derivation, control-limit
   formulas, per-pattern fail criteria and false-positive suppression. These are
